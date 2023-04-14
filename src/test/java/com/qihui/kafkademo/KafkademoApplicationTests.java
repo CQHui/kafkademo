@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
@@ -39,6 +40,7 @@ public class KafkademoApplicationTests {
         kafkaConsumer.subscribe(Pattern.compile("test"));
         ConsumerRecords poll = kafkaConsumer.poll(Duration.ofSeconds(3));
         Iterable test = poll.records("test");
+        Assert.isTrue(test.iterator().hasNext(), "there is no message");
         ConsumerRecord record = (ConsumerRecord) test.iterator().next();
         Assert.isTrue(record.value().toString().contains("message"), "there is no message");
     }
